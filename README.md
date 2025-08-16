@@ -1,93 +1,102 @@
-# FPV Tele-Driving Trainer (VR Headset Edition)
+# FPV Tele-Driving Trainer
 
 ## 📖 Overview
 
-The **FPV Tele-Driving Trainer** is a personal engineering project that simulates the experience of driving a real vehicle through a **first-person view (FPV)** system.  
-It combines **hardware controls** such as a steering wheel, pedals, and gearshift with a live video feed from a camera mounted on a small RC car.  
-Instead of viewing the feed on a screen, the project uses a **Google Cardboard-compatible VR headset** (or similar FPV goggles) for a fully immersive driving experience.  
-The goal is to replicate the sensation of being inside the vehicle while serving as a training platform for simulation, robotics, and remote control applications.
+The **FPV Tele-Driving Trainer** is a personal engineering project that simulates driving a vehicle from a **first-person perspective** using an RC platform.  
+It combines **custom-built physical driving controls** — steering wheel, pedals, gearshift, and handbrake — with a **live FPV (First-Person View) video feed** from a camera mounted on the vehicle.  
+
+Unlike computer-based streaming, the system uses a **dedicated FPV video transmitter and receiver** (similar to drone racing systems such as Walksnail, DJI, or FatShark), providing **ultra-low latency** video directly to FPV goggles for a smooth and immersive driving experience.
 
 ---
 
 ## 🎯 Objectives
 
-- Build a controllable FPV system using a camera-equipped vehicle
-- Design and fabricate custom **physical driving controls**:
-  - Steering wheel
-  - Accelerator pedal
-  - Brake pedal
-  - Clutch pedal
-  - Gear stick
-  - Handbrake
-- Enable smooth, low-latency video streaming directly to an FPV/VR headset
-- Integrate **hardware electronics**, **software control systems**, and **mechanical design** into one project
-- Explore immersive teleoperation, robotics education, and driving simulation applications
+- Build a controllable FPV vehicle with realistic driving controls.
+- Achieve **sub-50 ms video latency** via a dedicated FPV system.
+- Separate the project into two main modules:
+  - **Control Unit** – driver input hardware
+  - **Vehicle Unit** – RC vehicle hardware
+- Integrate electronics, mechanics, and wireless control into a cohesive system.
+- Provide an educational platform for robotics, teleoperation, and embedded systems.
 
 ---
 
-## 🛠️ System Components
+## 🛠️ Components
 
-### 1. **Vehicle Platform**
-- Small RC chassis or custom-built frame
-- **DC motors / Servo motors** for movement and steering
-- Motor driver module for control signals
-- Mounted FPV camera (optimized for headset viewing)
-
-### 2. **Control Hardware**
-- DIY steering wheel mechanism
-- Pedals (gas, brake, clutch) with potentiometer or load cell input
-- Gear shifter with positional sensors
+### Control Unit
+- Arduino Mega / ESP32
+- Steering wheel (potentiometer or encoder)
+- Accelerator and brake pedals (potentiometers or load cell sensors)
+- Gear shifter (switches or encoders)
 - Handbrake lever
-- Microcontroller (e.g., **Arduino Mega/Uno** or **ESP32**) for reading control inputs
+- Wi-Fi or RF module for sending control data
 
-### 3. **Processing & Communication**
-- **Raspberry Pi** (onboard vehicle) for camera feed and command processing
-- Wi-Fi or RF module for control signal transmission
-- Low-latency video streaming protocol (e.g., WebRTC)
-- Video feed formatted for **side-by-side (SBS)** view for VR headset compatibility
-
-### 4. **Viewing System**
-- **Google Cardboard-compatible VR headset** (or FPV goggles)
-- Smartphone or small display inside headset receives live stream from Raspberry Pi
-- Gyroscope integration (optional) for head tracking to pan camera
+### Vehicle Unit
+- RC chassis or custom frame
+- DC drive motors + motor driver (L298N, BTS7960, etc.)
+- Servo motor for steering
+- Raspberry Pi for receiving control data and controlling actuators
+- Wi-Fi or RF receiver module
+- **FPV camera** (dedicated, not Pi camera)
+- **FPV video transmitter** (Walksnail, DJI, FatShark, etc.)
+- Onboard battery
 
 ---
 
 ## 📡 How It Works
 
-1. **Driver’s Station**  
-   The user operates physical driving controls (steering wheel, pedals, gearstick, handbrake) built from custom parts connected to a microcontroller.
+1. **Driver’s Station (Control Unit)**  
+   - Physical driving controls are connected to an Arduino/ESP32.
+   - The microcontroller reads the inputs and sends control commands wirelessly to the Vehicle Unit.
 
-2. **Signal Processing**  
-   Control inputs are read by the microcontroller and sent wirelessly to the Raspberry Pi on the vehicle.
+2. **Vehicle Control (Vehicle Unit)**  
+   - Raspberry Pi receives commands and drives the motors/steering accordingly.
+   - The onboard FPV camera sends live video directly to the driver’s FPV goggles through the dedicated transmitter.
 
-3. **Vehicle Response**  
-   The Raspberry Pi translates received commands into motor and servo actions while streaming a side-by-side 3D camera feed.
+3. **Video Feedback**  
+   - Video does **not** pass through the Raspberry Pi, avoiding processing delays.
+   - The FPV goggles receive the feed in near real-time, similar to professional drone setups.
 
-4. **Immersive FPV Driving**  
-   The user wears a VR headset with a smartphone or display showing the live feed, creating the sensation of being inside the vehicle.
+---
+
+## 📦 Repository Structure
+
+```
+FPV_Model/
+│
+├── ControlUnit/
+│ ├── README.md # Details of the Control Unit hardware and firmware
+│ ├── src/ # Arduino/ESP32 code
+│ └── hardware/ # Schematics, CAD files
+│
+├── VehicleUnit/
+│ ├── README.md # Details of the Vehicle Unit hardware and control code
+│ ├── src/ # Raspberry Pi control scripts
+│ └── hardware/ # Wiring diagrams, chassis files
+│
+└── README.md # (This file) Project overview
+```
+
 
 ---
 
 ## 🔮 Future Improvements
 
-- Add **head-tracking** to move the onboard camera based on headset orientation
-- Integrate **haptic feedback** for steering and pedals
-- Include **AI driver assistance** using YOLOv8
-- Improve streaming performance with **dedicated FPV video transmitters**
-- Record and replay driving sessions in VR
+- Add **head-tracking** to move a gimbal-mounted FPV camera.
+- Implement **haptic feedback** for steering and pedals.
+- Integrate basic obstacle detection sensors for safety.
+- Test different FPV modules for range and image quality.
 
 ---
 
 ## 📦 Skills & Technologies Involved
 
-- **Electronics:** Arduino, ESP32, Raspberry Pi, motor drivers, sensors
-- **Programming:** Python, C/C++
-- **Networking:** Wi-Fi control, low-latency streaming
-- **VR Integration:** Side-by-side video formatting, optional head tracking
-- **Mechanical Fabrication:** Custom driving control system
-- **Computer Vision:** Optional YOLOv8 for object detection
+- **Electronics:** Arduino, ESP32, Raspberry Pi, motor drivers, sensors.
+- **Programming:** Python, C/C++.
+- **Networking:** Wi-Fi or RF control link.
+- **FPV Systems:** Dedicated camera and transmitter for low-latency video.
+- **Mechanical Fabrication:** Custom steering and pedal assemblies.
 
 ---
 
-> **Disclaimer:** This project is for educational and training purposes only. It is not intended for real vehicle operation on public roads.
+> **Disclaimer:** This project is for educational and experimental use only. Not intended for real vehicle operation on public roads.
