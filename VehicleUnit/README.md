@@ -1,62 +1,46 @@
 # Vehicle Unit – FPV Tele-Driving Trainer
 
 ## 📖 Overview
-The Vehicle Unit is the **RC car platform** for the FPV Tele-Driving Trainer project.  
-It consists of a Raspberry Pi handling **motor control** and **live FPV video streaming** to the Control Unit's VR headset.
+The **Vehicle Unit** is the mobile platform of the FPV Tele-Driving Trainer.  
+It receives control commands from the Control Unit, actuates motors/steering, and streams live video through a **dedicated FPV video transmitter** to the driver’s FPV goggles.
 
 ---
 
-## 🛠 Components
-- **Raspberry Pi 4/5** (for processing and streaming)
-- **Motors & Steering**:
-  - DC motor(s) for driving
-  - Servo motor for steering
-- **Motor Driver**: L298N / L293D / ESC
-- **FPV Camera**: Pi Camera Module / USB camera
-- **Wireless Communication**: Built-in Pi Wi-Fi or external dongle
-- **Power Supply**: LiPo battery
+## 🎯 Objectives
+- Drive motors and steering based on remote control commands
+- Provide near-zero latency video via FPV transmitter
+- Maintain stable wireless connection for controls
+
+---
+
+## 🛠️ Components
+- **Vehicle Platform:** RC car chassis or custom frame
+- **Drive System:** DC motors with motor driver (L298N, BTS7960, etc.)
+- **Steering:** Servo motor
+- **Onboard Controller:** Raspberry Pi (receives commands and controls actuators)
+- **Communication:** Wi-Fi link for control data
+- **FPV Video System:**
+  - FPV camera
+  - FPV video transmitter (Walksnail, DJI, FatShark, etc.)
+  - Powered from onboard battery
 
 ---
 
 ## 📡 How It Works
-1. Raspberry Pi receives control commands from the Control Unit over Wi-Fi or RF.
-2. Pi translates commands into PWM signals for motors and steering.
-3. Pi captures video from the camera.
-4. Video is streamed in **side-by-side (SBS)** format for VR headset compatibility.
-5. Video feed is viewed in real-time by the driver through a VR headset.
+1. Raspberry Pi listens for control signals from Control Unit.
+2. Commands are translated into motor driver and servo actions.
+3. FPV camera sends live feed directly to driver’s FPV goggles via dedicated transmitter.
+4. No video data passes through the Raspberry Pi, minimizing latency.
 
 ---
 
-## 📷 Video Streaming
-- **Protocol Options**:
-  - WebRTC (low latency, <100 ms)
-  - GStreamer (configurable latency)
-  - Dedicated FPV transmitter/receiver for near-zero delay
-- **Format**: Side-by-side (SBS) for VR headset display.
+## 📦 Skills & Tools
+- Python for Raspberry Pi control scripts
+- Motor control programming
+- Power management for mobile systems
 
 ---
 
-## 🔌 Wiring Overview
-- Raspberry Pi GPIO → Motor driver → Motors
-- Raspberry Pi GPIO (PWM) → Servo motor (steering)
-- Camera connected via CSI or USB
-
----
-
-## 🖥 Software
-- Python scripts to:
-  - Receive and parse control packets
-  - Drive motors and steering via GPIO PWM
-  - Stream camera feed to Control Unit
-- Optional ROS 2 nodes for scalable communication.
-
----
-
-## 📦 Skills Used
-- Raspberry Pi hardware interfacing
-- Python programming
-- Motor driver control
-- Low-latency video streaming
-- Networking over Wi-Fi
-
----
+## 🔮 Future Improvements
+- Add distance sensors for collision alerts (buzzer in Control Unit)
+- Modular battery system for longer runtimes

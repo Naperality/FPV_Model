@@ -1,58 +1,46 @@
 # Control Unit – FPV Tele-Driving Trainer
 
 ## 📖 Overview
-The Control Unit is the **driver's station** for the FPV Tele-Driving Trainer project.  
-It consists of physical driving controls — steering wheel, pedals, gear shifter, and handbrake — connected to a microcontroller (Arduino or ESP32) that reads input values and sends them wirelessly to the **Vehicle Unit**.
+The **Control Unit** is the driver’s station for the FPV Tele-Driving Trainer.  
+It consists of **physical driving controls** (steering wheel, pedals, gear stick, handbrake) connected to a microcontroller that sends commands to the vehicle wirelessly.  
+Video feedback is provided **directly** by dedicated FPV goggles, ensuring near-zero latency without routing video through the control system.
 
 ---
 
-## 🛠 Components
-- **Microcontroller**: Arduino Mega / Uno / ESP32
-- **Controls**:
-  - Steering wheel (potentiometer-based)
-  - Accelerator pedal (potentiometer or load cell)
-  - Brake pedal (potentiometer or load cell)
-  - Clutch pedal (potentiometer)
-  - Gear shifter (positional switches/sensors)
-  - Handbrake lever (switch or potentiometer)
-- **Wireless Communication**:
-  - Wi-Fi (ESP32 or Arduino + ESP8266)
-  - Optional: NRF24L01 or RF module
+## 🎯 Objectives
+- Capture and send driver control inputs to the Vehicle Unit
+- Ensure low-latency command transmission over Wi-Fi or RF link
+- Integrate realistic, custom-built driving controls
+
+---
+
+## 🛠️ Components
+- **Microcontroller:** Arduino Mega / Uno / ESP32
+- **Driving Controls:**
+  - Steering wheel with rotary encoder or potentiometer
+  - Accelerator, brake, clutch pedals (potentiometer or load cell sensors)
+  - Gear shifter with positional switches
+  - Handbrake lever
+- **Communication:** Wi-Fi module (ESP32 built-in or ESP8266)
+- **Power Supply:** USB or DC adapter
 
 ---
 
 ## 📡 How It Works
-1. The microcontroller reads analog and digital signals from the controls.
-2. Inputs are converted into control commands:
-
-```
-STEER=45
-THROTTLE=80
-BRAKE=0
-GEAR=2
-```
-
-3. Commands are sent over Wi-Fi or RF to the Vehicle Unit at ~20–50 Hz.
+1. User operates physical controls.
+2. Arduino/ESP32 reads sensor data from controls.
+3. Control data is packaged and sent wirelessly to the Vehicle Unit’s Raspberry Pi.
+4. Vehicle Unit acts on these commands while video feed is handled by the FPV system.
 
 ---
 
-## 🔌 Wiring Overview
-- Potentiometers connected to analog pins for steering and pedals.
-- Switches or sensors connected to digital pins for gear and handbrake.
-- Communication module connected via UART or SPI.
+## 📦 Skills & Tools
+- Arduino IDE / PlatformIO
+- C/C++ programming
+- Basic electronics wiring & soldering
 
 ---
 
-## 🖥 Software
-- **Arduino IDE** for microcontroller programming.
-- Code reads all inputs, formats them into a packet, and transmits to Vehicle Unit.
-- Communication protocol: UDP, WebSocket, or ROS 2 micro-ROS.
-
----
-
-## 📦 Skills Used
-- Electronics wiring and sensor interfacing
-- Microcontroller programming (C/C++)
-- Networking basics (Wi-Fi or RF communication)
-
----
+## 🔮 Future Improvements
+- Force feedback for steering
+- Adjustable pedal resistance
