@@ -1,46 +1,59 @@
 # Vehicle Unit – FPV Tele-Driving Trainer
 
 ## 📖 Overview
-The **Vehicle Unit** is the mobile platform of the FPV Tele-Driving Trainer.  
-It receives control commands from the Control Unit, actuates motors/steering, and streams live video through a **dedicated FPV video transmitter** to the driver’s FPV goggles.
-
----
-
-## 🎯 Objectives
-- Drive motors and steering based on remote control commands
-- Provide near-zero latency video via FPV transmitter
-- Maintain stable wireless connection for controls
+The **Vehicle Unit** is the RC vehicle platform for the FPV Tele-Driving Trainer.  
+It receives driving commands from the Control Unit and controls the motors, steering, and other onboard systems.  
+A **dedicated FPV camera and video transmitter** sends real-time video to the driver’s FPV goggles.
 
 ---
 
 ## 🛠️ Components
-- **Vehicle Platform:** RC car chassis or custom frame
-- **Drive System:** DC motors with motor driver (L298N, BTS7960, etc.)
+- **Base:** RC chassis or custom frame
+- **Drive Motors:** DC motors with motor driver (L298N, BTS7960, etc.)
 - **Steering:** Servo motor
-- **Onboard Controller:** Raspberry Pi (receives commands and controls actuators)
-- **Communication:** Wi-Fi link for control data
-- **FPV Video System:**
-  - FPV camera
-  - FPV video transmitter (Walksnail, DJI, FatShark, etc.)
-  - Powered from onboard battery
+- **Onboard Controller:** Raspberry Pi (or ESP32 if no Pi needed)
+- **Wireless Communication Module:** Wi-Fi or RF receiver
+- **FPV System:**  
+  - FPV camera (Walksnail, DJI, FatShark, etc.)  
+  - FPV video transmitter  
+  - FPV goggles (receiver)
+- **Battery:** LiPo or Li-ion pack
 
 ---
 
-## 📡 How It Works
-1. Raspberry Pi listens for control signals from Control Unit.
-2. Commands are translated into motor driver and servo actions.
-3. FPV camera sends live feed directly to driver’s FPV goggles via dedicated transmitter.
-4. No video data passes through the Raspberry Pi, minimizing latency.
+## ⚙️ How It Works
+1. Raspberry Pi (or controller) receives control data from the Control Unit.
+2. Commands are translated into motor driver and servo signals.
+3. The FPV camera sends live video directly to the goggles via the FPV transmitter — bypassing the Pi to ensure minimal latency.
+4. Vehicle movement and video feedback occur almost instantly.
 
 ---
 
-## 📦 Skills & Tools
-- Python for Raspberry Pi control scripts
-- Motor control programming
-- Power management for mobile systems
+## 📡 Communication Protocol
+- Matches the Control Unit format:
+```
+STEER:512|ACC:300|BRK:0|GEAR:3|HB:0
+```
+
+- Pi interprets values and adjusts PWM outputs accordingly.
 
 ---
 
-## 🔮 Future Improvements
-- Add distance sensors for collision alerts (buzzer in Control Unit)
-- Modular battery system for longer runtimes
+## 📂 File Structure
+
+```
+VehicleUnit/
+│
+├── README.md # This file
+├── src/ # Raspberry Pi scripts for motor control
+└── hardware/ # Wiring diagrams, chassis files
+```
+
+
+---
+
+## 🔮 Possible Upgrades
+- Add **two-axis gimbal** for FPV camera.
+- Integrate **GPS** for telemetry.
+- Add **collision detection sensors** (ultrasonic, IR).
+- Enable **head tracking** for camera control.
