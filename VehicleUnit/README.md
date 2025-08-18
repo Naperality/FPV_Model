@@ -49,7 +49,6 @@ VehicleUnit/
 └── hardware/ # Wiring diagrams, chassis files
 ```
 
-
 ---
 
 ## 🔮 Possible Upgrades
