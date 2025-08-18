@@ -52,9 +52,6 @@ ControlUnit/
 └── hardware/ # Schematics, wiring diagrams, CAD files
 ```
 
-
-
-
 ---
 
 ## 🔮 Possible Upgrades
