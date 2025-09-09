@@ -1,7 +1,6 @@
 # FPV Tele-Driving Trainer
 
 ## 📖 Overview
-
 The **FPV Tele-Driving Trainer** is a personal engineering project that simulates driving a vehicle from a **first-person perspective** using an RC platform.  
 It combines **custom-built physical driving controls** — steering wheel, pedals, gearshift, and handbrake — with a **live FPV (First-Person View) video feed** from a camera mounted on the vehicle.  
 
