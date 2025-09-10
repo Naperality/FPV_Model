@@ -7,41 +7,6 @@ It combines **custom-built physical driving controls** — steering wheel, pedal
 Unlike computer-based streaming, the system uses a **dedicated FPV video transmitter and receiver** (similar to drone racing systems such as Walksnail, DJI, or FatShark), providing **ultra-low latency** video directly to FPV goggles for a smooth and immersive driving experience.
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 🎯 Objectives
 
 - Build a controllable FPV vehicle with realistic driving controls.
