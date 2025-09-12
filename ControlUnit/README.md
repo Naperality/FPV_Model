@@ -51,21 +51,6 @@ ControlUnit/
 ├── src/ # Arduino or ESP32 firmware
 └── hardware/ # Schematics, wiring diagrams, CAD files
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 
 ## 🔮 Possible Upgrades
