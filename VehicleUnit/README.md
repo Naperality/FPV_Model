@@ -48,10 +48,6 @@ VehicleUnit/
 ├── src/ # Raspberry Pi scripts for motor control
 └── hardware/ # Wiring diagrams, chassis files
 ```
-
-
-
-
 ---
 
 ## 🔮 Possible Upgrades
