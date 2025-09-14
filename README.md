@@ -5,6 +5,7 @@ The **FPV Tele-Driving Trainer** is a personal engineering project that simulate
 It combines **custom-built physical driving controls** — steering wheel, pedals, gearshift, and handbrake — with a **live FPV (First-Person View) video feed** from a camera mounted on the vehicle.  
 
 Unlike computer-based streaming, the system uses a **dedicated FPV video transmitter and receiver** (similar to drone racing systems such as Walksnail, DJI, or FatShark), providing **ultra-low latency** video directly to FPV goggles for a smooth and immersive driving experience.
+
 ---
 ## 🎯 Objectives
 
