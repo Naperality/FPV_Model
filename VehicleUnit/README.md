@@ -49,11 +49,6 @@ VehicleUnit/
 └── hardware/ # Wiring diagrams, chassis files
 ```
 ---
-
-
-
-
-
 ## 🔮 Possible Upgrades
 - Add **two-axis gimbal** for FPV camera.
 - Integrate **GPS** for telemetry.
