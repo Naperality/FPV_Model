@@ -4,7 +4,6 @@
 The **Vehicle Unit** is the RC vehicle platform for the FPV Tele-Driving Trainer.  
 It receives driving commands from the Control Unit and controls the motors, steering, and other onboard systems.  
 A **dedicated FPV camera and video transmitter** sends real-time video to the driver’s FPV goggles.
-
 ---
 
 ## 🛠️ Components
