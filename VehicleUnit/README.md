@@ -1,104 +1,113 @@
-# Vehicle Unit – FPV Tele-Driving Trainer
+
+---
+
+# 📂 VehicleUnit/README.md
+
+```markdown
+# 🚗 Vehicle Unit – FPV Tele-Driving Trainer
 
 ## 📖 Overview
-The **Vehicle Unit** serves as the RC vehicle platform of the FPV Tele-Driving Trainer.  
-It receives control data from the **Control Unit** via **ESP-NOW** and drives the **motor**, **steering servo**, and other systems onboard.  
-A **dedicated FPV camera and video transmitter** provides a real-time, low-latency first-person view directly to the driver’s FPV goggles — fully independent from the ESP32 system.
+
+The **Vehicle Unit** is the mobile robotic platform that executes driving commands received from the **Control Unit**.
+
+It consists of an **RC car chassis, motor controller, steering servo, and FPV camera system**. The microcontroller receives wireless commands and translates them into motor speed and steering angle.
+
+This unit also carries the **FPV camera and video transmitter**, providing the driver with a real-time first-person view of the vehicle.
 
 ---
 
-## 🛠️ Components
+## 🎯 Objectives
 
-| Part | Description |
-|------|--------------|
-| **Main Board** | ESP32-S3 N16R8 |
-| **Chassis Base** | 1/10 Scale RC Car Frame |
-| **Drive Motor** | Brushed DC Motor (200 RPM) |
-| **Motor Driver** | BTS7960 (for brushed DC motors) |
-| **Steering Motor** | DS3218 High-Torque Servo |
-| **FPV System** | FPV Camera + Video Transmitter (Walksnail, DJI, or FatShark) |
-| **Power Supply** | LiPo or Li-ion Battery Pack |
-| **Wireless Link** | ESP-NOW (direct communication with Control Unit) |
+- Receive wireless driving commands from the Control Unit
+- Control the vehicle's steering and motor
+- Provide real-time FPV video feedback
+- Maintain responsive teleoperation performance
 
 ---
 
-## ⚙️ How It Works
+## 🧰 Hardware Components
 
-1. The **ESP32-S3 Vehicle Unit** receives wireless control data from the **Control Unit** using the **ESP-NOW protocol**.
-2. The **BTS7960** motor driver regulates power to the **DC motor**, controlling forward and reverse motion based on throttle input.
-3. The **DS3218 servo** adjusts steering position based on steering angle commands.
-4. The **FPV camera** transmits a live video feed directly to FPV goggles — bypassing the ESP32 entirely for **ultra-low latency**.
-5. The onboard battery powers all electronic components, maintaining wireless and motor operation simultaneously.
+| Component | Description |
+|-----------|-------------|
+| **Microcontroller** | Arduino Uno |
+| **Motor** | Brushed 540 DC Motor |
+| **Motor Controller** | Hobbywing Quicrun ESC |
+| **Steering Servo** | DS3218 High Torque Servo |
+| **Chassis** | 1/10 Scale RC Car Frame |
+| **FPV Camera** | Analog/Digital FPV Camera |
+| **Video Transmitter** | Walksnail / DJI / FatShark |
+| **Battery** | 11.1V LiPo Battery (3S 30C) |
 
 ---
 
-## 📡 Communication Protocol
+## 📡 Wireless Control
 
-The **Control Unit** transmits structured data packets via ESP-NOW, formatted as:
+The vehicle unit receives command packets from the control unit.
+
+Example received structure:
+
+```cpp
+struct Telemetry {
+  uint8_t steering;
+  uint16_t throttle;
+  uint16_t brake;
+  uint8_t gear;
+};
+```
+
+---
+
+## ⚙️ Motor Control
+
+The Hobbywing Quicrun ESC regulates the motor speed.
+Signal interface:
+```
+
+PWM Signal → ESC → Motor Speed Control
 
 ```
-STEER:512|ACC:300|BRK:0|GEAR:3|HB:0
+Typical ESC PWM ranges:
+
+| Signal | Value |
+|-----------|-------------|
+| **Full Reverse** | 1000 µs |
+| **Neutral** | 1500 µs |
+| **Full Forward** | 2000 µs |
 ```
 
 ---
 
-| Field | Description |
-|--------|--------------|
-| **STEER** | Steering wheel angle (0–1023 mapped to servo PWM) |
-| **ACC** | Accelerator pedal position (0–1023 mapped to DC motor speed) |
-| **BRK** | Brake intensity (0–1023 mapped to reverse torque or stop) |
-| **GEAR** | Current gear state (e.g., Park, Drive, Reverse) |
-| **HB** | Handbrake toggle (0 = off, 1 = engaged) |
+## 🔧 Steering System
 
-The ESP32 parses this data and outputs PWM signals to the BTS7960 and DS3218 servo accordingly.
+The steering system uses a DS3218 servo motor connected to the front steering linkage.
+```
 
----
+Steering Command → Servo PWM → Wheel Angle
 
-## ⚙️ Control Logic Summary
-
-| Function | Hardware | Description |
-|-----------|-----------|-------------|
-| **Throttle/Brake** | BTS7960 + DC Motor | Converts input throttle/brake values into PWM motor control |
-| **Steering** | DS3218 Servo | Adjusts wheel angle proportionally to steering input |
-| **Gear & Handbrake** | Digital Pins | Interprets logic signals for gear state and handbrake |
+```
+Servo characteristics:
+- Torque: ~20 kg·cm
+- Voltage: 6–7.4V
+- Rotation: ~180°
+```
 
 ---
 
-## 📂 File Structure
+## 📂 Directory Structure
 
 ```
 VehicleUnit/
 │
-├── README.md # This file
 ├── src/
-│ ├── main.ino # ESP32-S3 control firmware for motor & steering
-│ └── espnow_receiver.h # Handles wireless data reception and parsing
+│   ├── vehicle_control.ino
+│   ├── radio_receiver.cpp
+│   ├── motor_control.cpp
 │
-└── hardware/
-├── wiring_diagram.png # Motor & servo wiring schematic
-├── chassis_model.stl # (Optional) 3D model of chassis frame
-└── pinout_reference.pdf
+├── hardware/
+│   ├── wiring_diagram.png
+│   ├── chassis_layout.stl
+│
+└── README.md
 ```
 
-
 ---
-
-## 🔮 Future Enhancements
-- Add **wheel speed sensor** for closed-loop speed control.  
-- Integrate **IMU (MPU6050)** for stability and tilt sensing.  
-- Implement **telemetry feedback** to Control Unit (battery voltage, RPM, etc.).  
-- Support **head-tracked gimbal** from 2DOF Tilt Unit for dynamic FPV view.  
-- Add **proximity sensors** (ultrasonic, IR, or ToF) for obstacle detection.
-
----
-
-## ⚙️ Notes
-- The FPV video stream operates **independently** from ESP-NOW communication.  
-- Using **ESP32-S3 N16R8** ensures stable performance and low latency for control response.  
-- Proper isolation of **motor driver power and logic ground** is crucial to prevent noise in signal lines.
-
----
-
-> **Disclaimer:**  
-> This system is designed solely for educational and experimental use.  
-> It is **not intended for use in real vehicles** or outdoor public environments.
