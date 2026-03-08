@@ -1,113 +1,112 @@
-# Control Unit – FPV Tele-Driving Trainer
+# 🎮 Control Unit – FPV Tele-Driving Trainer
 
 ## 📖 Overview
-The **Control Unit** acts as the driver’s cockpit for the FPV Tele-Driving Trainer.  
-It houses all physical input controls — **steering wheel**, **pedals**, **gear shifter**, and **handbrake** — which are read by an **ESP32-S3 N16R8** and transmitted wirelessly via **ESP-NOW** to the Vehicle Unit for real-time driving control.
+The **Control Unit** acts as the **driver station** of the FPV Tele-Driving Trainer system.  
+It captures the driver’s inputs through physical controls such as a **steering wheel, pedals, and gear shifter**, then converts them into digital control signals.
+
+These signals are transmitted wirelessly to the **Vehicle Unit** using an RF communication module (NRF24L01 PA+LNA or ESP-NOW). The goal is to replicate a **realistic driving interface** similar to an actual vehicle cockpit.
 
 ---
 
-## 🛠️ Components
+## 🎯 Objectives
 
-| Part | Description |
-|------|--------------|
-| **Main Board** | ESP32-S3 N16R8 |
-| **Steering Input** | AS5600 Magnetic Encoder + Steering Wheel |
-| **Accelerator Pedal** | KY-024 or KY-035 Linear Hall Sensor |
-| **Brake Pedal** | HX711 Amplifier + 5 kg Load Cell |
-| **Gear Shifter** | Omron D2FC-F-7N / KW12-3 Microswitches in 3D Printed Shifter Housing |
-| **Handbrake** | Lever + Omron D2FC-F-7N / KW12-3 Microswitch |
-| **Wireless Link** | ESP-NOW (Direct peer-to-peer ESP32 communication) |
-| **Power Supply** | USB-C / 5V Regulated Adapter |
+- Capture driver inputs using sensors and mechanical controls.
+- Convert physical movement into digital control signals.
+- Transmit control commands wirelessly to the vehicle.
+- Provide low-latency input response for smooth tele-driving.
 
 ---
 
-## ⚙️ How It Works
+## 🧰 Hardware Components
 
-1. The **ESP32-S3** continuously reads all analog and digital inputs from the controls:
-   - The **AS5600 encoder** provides steering angle data.
-   - The **Hall sensors** detect pedal positions.
-   - The **Load Cell + HX711** measures brake pressure.
-   - The **Omron switches** detect gear shift positions and handbrake engagement.
-2. The ESP32-S3 packages these values into a structured data packet.
-3. Data is transmitted via **ESP-NOW** to the **Vehicle Unit** at high frequency (~100 Hz).
-4. The Vehicle Unit interprets the values and responds instantly with motor and steering actions.
+| Component | Description |
+|-----------|-------------|
+| **Microcontroller** | Arduino Uno |
+| **Steering Sensor** | AS5600 Magnetic Rotary Encoder |
+| **Pedal Sensors** | Hall Effect Sensors |
+| **Gear Shifter Sensor** | KY-024 / KY-035 Magnetic Sensor |
+| **Wireless Module** | NRF24L01 PA+LNA or ESP32 ESP-NOW |
+| **Display (optional)** | OLED display for telemetry feedback |
 
 ---
 
-## 📡 Communication Protocol
+## 🎮 Driver Controls
 
-- **Transmission Type:** ESP-NOW (peer-to-peer, low-latency)
-- **Typical Update Rate:** 50 – 100 Hz
-- **Packet Format:**
+### Steering Wheel
+- Uses an **AS5600 magnetic encoder** for contactless rotation measurement.
+- Converts wheel angle into steering commands.
+- Mimics real vehicle steering behavior.
 
+### Pedal System
+Two pedals are used:
+
+| Pedal | Function |
+|------|---------|
+| Accelerator | Controls vehicle throttle |
+| Brake | Controls braking or reverse |
+
+Hall sensors detect pedal position via magnetic displacement.
+
+---
+
+### Gear Shifter
+
+A **linear magnetic gear shifter** provides four positions:
 ```
-STEER:512|ACC:300|BRK:120|GEAR:2|HB:0
+P → Park
+R → Reverse
+N → Neutral
+D → Drive
+```
+
+
+The KY-024/KY-035 sensor detects the magnet position to determine the gear state.
+
+---
+
+## 📡 Wireless Communication
+
+The control unit sends a **structured data packet** to the vehicle unit containing:
+
+Example structure:
+
+```cpp
+struct Telemetry {
+  uint8_t steering;
+  uint16_t throttle;
+  uint16_t brake;
+  uint8_t gear;
+};
 ```
 
 ---
-- **Field Descriptions:**
 
-| Field | Description |
-|--------|-------------|
-| **STEER** | Steering position (0–1023 from AS5600) |
-| **ACC** | Accelerator pedal position (0–1023 from Hall sensor) |
-| **BRK** | Brake pressure (0–1023 mapped from HX711) |
-| **GEAR** | Gear selector position (integer value 0–5) |
-| **HB** | Handbrake state (0 = off, 1 = on) |
+## ⚙️ System Workflow
 
----
+- Driver moves steering wheel or pedals.
+- Sensors detect position changes.
+- Arduino converts readings to control values.
+- Data packet is transmitted wirelessly.
+- Vehicle Unit receives commands and executes them.
 
-## ⚙️ Wiring Summary
-
-| Component | Signal Type | ESP32 Pin Example |
-|------------|--------------|-------------------|
-| AS5600 Magnetic Encoder | I²C (SDA/SCL) | GPIO 21 (SDA), GPIO 22 (SCL) |
-| KY-024 / KY-035 Pedal Sensor | Analog | GPIO 34 (ACC), GPIO 35 (optional clutch) |
-| HX711 + Load Cell | Digital (DT/SCK) | GPIO 18 (DT), GPIO 19 (SCK) |
-| Gear Shifter Switches | Digital | GPIO 12–15 |
-| Handbrake Switch | Digital | GPIO 27 |
-| ESP-NOW Communication | Wi-Fi Hardware | Internal |
-| Power | 5 V USB-C | — |
 
 ---
 
-## 📂 File Structure
+### 📂 Directory Structure
 
 ```
 ControlUnit/
 │
-├── README.md # This file
 ├── src/
-│ ├── main.ino # ESP32-S3 firmware for reading sensors & sending packets
-│ └── espnow_sender.h # ESP-NOW transmission logic
+│   ├── main_control.ino
+│   ├── steering_reader.cpp
+│   ├── pedal_reader.cpp
 │
-└── hardware/
-├── wiring_diagram.png # Control panel wiring schematic
-├── 3d_shifter_case.stl # 3D printable gear shifter container
-└── pinout_reference.pdf
+├── hardware/
+│   ├── wiring_diagram.png
+│   ├── steering_mechanism.stl
+│
+└── README.md
 ```
 
-
 ---
-
-## 🔮 Future Enhancements
-
-- Add **clutch pedal** input for manual transmission simulation.  
-- Implement **force feedback** using a motorized steering wheel.  
-- Include **OLED/LCD dashboard** for live telemetry (gear, throttle, brake).  
-- Integrate **hand-tracking or voice control** for secondary functions.  
-- Add **vibration/haptic feedback** for enhanced realism.
-
----
-
-## ⚙️ Notes
-
-- The **ESP32-S3 N16R8** provides ample processing power and memory for simultaneous analog, digital, and wireless tasks.  
-- Using **ESP-NOW** ensures **ultra-low latency** control, independent of Wi-Fi networks.  
-- Make sure to **debounce all microswitches** (hardware or software) to avoid false triggers.  
-
----
-
-> **Disclaimer:**  
-> This Control Unit is intended for **educational and experimental** applications only.  
-> Not suitable for use in real vehicles or outdoor operation.
