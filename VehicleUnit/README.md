@@ -64,13 +64,12 @@ PWM Signal → ESC → Motor Speed Control
 
 ```
 Typical ESC PWM ranges:
-```
+
 | Signal | Value |
 |-----------|-------------|
 | **Full Reverse** | 1000 µs |
 | **Neutral** | 1500 µs |
 | **Full Forward** | 2000 µs |
-```
 
 ---
 
@@ -86,7 +85,6 @@ Servo characteristics:
 - Torque: ~20 kg·cm
 - Voltage: 6–7.4V
 - Rotation: ~180°
-```
 
 ---
 
