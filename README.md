@@ -27,60 +27,37 @@ Unlike computer-based streaming, the system uses a **dedicated FPV video transmi
 ### 🧭 Control Unit
 | Part | Description |
 |------|--------------|
-| **Board** | ESP32-S3 N16R8 |
+| **Board** | Arduino Uno |
 | **Steering** | AS5600 Magnetic Encoder + Custom Steering Wheel |
-| **Pedals** | KY-024/KY-035 Magnetic Sensor + HX711 + 5KG Load Cell |
-| **Gear Shifter** | Omron D2FC-F-7N or KW12-3 Micro Switch + 3D Printed Gear Container |
-| **Emergency Handbrake** | Omron D2FC-F-7N or KW12-3 Micro Switch + Lever Mechanism |
-| **Wireless Link** | ESP-NOW / Wi-Fi Communication to Vehicle Unit |
+| **Pedals** | Hall-effect Sensors |
+| **Gear Shifter** | KY-024/KY-035 Magnetic Sensor + Custom Linear P-R-N-D Shifter |
+| **Wireless Link** | ESP-NOW / NRF24 PA+LNA |
 
 ---
 
 ### 🚗 Vehicle Unit
 | Part | Description |
 |------|--------------|
-| **Board** | ESP32-S3 N16R8 |
-| **Engine** | Brushed DC Motor (200 RPM) + BTS7960 Motor Driver |
+| **Board** | Arduino Uno |
+| **Engine** | Brushed 540 DC Motor (200 RPM) + Hobbywing Quikrun ESC |
 | **Steering** | DS3218 Servo Motor |
 | **Chassis** | 1/10 RC Car Frame |
 | **FPV Setup** | Dedicated FPV Camera + Transmitter (Walksnail, DJI, or FatShark) |
-| **Power** | LiPo Battery |
-
----
-
-### 🎥 2DOF Tilt Unit
-| Part | Description |
-|------|--------------|
-| **Board** | ESP32-S3 N16R8 |
-| **Tilting Mechanism** | 2× SG90 or MG90S Servo Motors |
-| **Mount** | Dual-Axis Servo Mount for FPV Camera |
-| **Control Input** | Data from Headgear Unit (Head Tilt) |
-
----
-
-### 🪖 Headgear Unit
-| Part | Description |
-|------|--------------|
-| **Board** | ESP32-S3 N16R8 |
-| **Sensor** | MPU6050 (for head tilt motion tracking) |
-| **Wireless Link** | Sends head orientation data to 2DOF Tilt Unit |
+| **Power** | LiPo Battery(11.1 30C rating) |
 
 ---
 
 ## 📡 How It Works
 
 1. **Control Unit (Driver Station)**  
-   - Reads steering, pedal, gear, and handbrake inputs using sensors and switches.  
-   - Sends control signals wirelessly to the **Vehicle Unit** via **ESP-NOW**.
+   - Reads steering, pedal, and gear inputs using sensors and switches.  
+   - Sends control signals wirelessly to the **Vehicle Unit** via **(SPI) Radio Transmission**.
 
 2. **Vehicle Unit (RC Car)**  
-   - Receives driving commands and actuates the motor (via BTS7960) and steering servo (DS3218).  
-   - The onboard FPV camera transmits live video directly to FPV goggles using a **dedicated FPV system**, not processed by the ESP32.
+   - Receives driving commands and actuates the motor (via Hobbywing ESC) and steering servo (DS3218).  
+   - The onboard FPV camera transmits live video directly to FPV goggles using a **dedicated FPV system**, not processed by the Arduino.
 
-3. **2DOF Tilt & Headgear Units**  
-   - The **Headgear Unit** tracks head tilt using an **MPU6050**, then transmits data to the **2DOF Tilt Unit**, which adjusts two servos to pan and tilt the FPV camera accordingly.
-
-4. **Video Feedback**  
+3. **Video Feedback**  
    - Video bypasses any microcontroller, streaming directly to the goggles for **near-zero latency** — similar to drone FPV racing setups.
 
 ---
