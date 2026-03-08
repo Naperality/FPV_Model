@@ -1,9 +1,6 @@
 
 ---
 
-# 📂 VehicleUnit/README.md
-
-```markdown
 # 🚗 Vehicle Unit – FPV Tele-Driving Trainer
 
 ## 📖 Overview
