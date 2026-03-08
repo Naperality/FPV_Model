@@ -64,7 +64,7 @@ PWM Signal → ESC → Motor Speed Control
 
 ```
 Typical ESC PWM ranges:
-
+```
 | Signal | Value |
 |-----------|-------------|
 | **Full Reverse** | 1000 µs |
