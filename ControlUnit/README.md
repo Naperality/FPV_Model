@@ -99,8 +99,8 @@ ControlUnit/
 │
 ├── src/
 │   ├── main_control.ino
-│   ├── steering_reader.cpp
-│   ├── pedal_reader.cpp
+│   ├── steering_reader.ino
+│   ├── pedal_reader.ino
 │
 ├── hardware/
 │   ├── wiring_diagram.png
